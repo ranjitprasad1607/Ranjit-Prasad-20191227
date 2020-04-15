@@ -1,0 +1,481 @@
+Assignment   
+--------------------------------------------
+By Ranjit Prasad(stats honours
+Roll no. 20191227)
+---------------------------------------------
+
+1. Create a database having two tables with the specified fields, to computerize a library system of a Delhi University College. 
+LibraryBooks (Accession number, Title, Author, Department, PurchaseDate, Price) 10 
+
+IssuedBooks (Accession number, Borrower) 
+a) Identify primary and foreign keys. Create the tables and insert at least 5 records in each table. 
+b) Delete the record of book titled “Database System Concepts”. 
+c) Change the Department of the book titled “Discrete Maths” to “CS”. 
+d) List all books that belong to “CS” department. 
+e) List all books that belong to “CS” department and are written by author “Navathe”. 
+f) List all computer (Department = “CS”) that have been issued. 
+g) List all books which have a price less than 500 or purchased between “01/01/1999” and “01/01/2004”. 
+
+Solution:
+create database db;
+use db;
+
+-----Creating Tables-----
+
+create table LibraryBooks(
+Accession_number int(10) primary key,
+Title varchar(40) not null,
+Author varchar(20) not null,
+Department varchar(15) not null,
+PurchaseDate date,
+Price int(10));
+
+create table IssuedBooks(
+Accession_number int(10) not null,
+Borrower varchar(30),
+foreign key(Accession_number) references LibraryBooks(Accession_number));
+
+(a)
+Accession_number is the primary key for table LibraryBooks and it is the foreign key for table Issued books.
+
+-----Inserting values-----
+
+insert into LibraryBooks(1234,"Database System Concepts","Ranjit Prasad","CS",'2015-02-26',450);
+insert into LibraryBooks(5468,"Discrete Maths","RD Sharma",Mathematics",'2005-03-28',880);
+insert into LibraryBooks(9876,"Trigonometry","SL Loney","Mathematics",'2010-12-08',490)
+insert into LibraryBooks(8856,"Neural Networks","Navathe","CS",'2018-11-18',1150);
+insert into LibraryBooks(7796,"Panchatantra","Vishnu Sharma","Hindi",'2000-11-02',150);
+insert into LibraryBooks(5598,"Rich Dad Poor Dad","Robert T Kiyosaki","Finance",'2012-11-02',200);
+insert into LibraryBooks(8236,"Advanced Matrices",Navathe",Mathematics",'2002-11-20',2150);
+insert into LibraryBooks(2132,"Concept of Physics","HC Verma","CS",'2001-10-26',450);
+insert into LibraryBooks(1897,"Cloud Computing","Navathe","CS",'2011-12-01',2450);
+insert into LibraryBooks(1556,"The Invisible Man","HG Wells","ENglish",'2001-12-10',350);
+
+
+insert into IssuedBooks values(1234,”Anupam Anand”);
+insert into IssuedBooks values(1556,”V K Singh”);
+insert into IssuedBooks values(8856,”Aviral Yadav”);
+insert into IssuedBooks values(5598,”Arpit Maurya”);
+insert into IssuedBooks values(1897,”Shubham Kumar Gupta”);
+
+(b) 
+delete from libraryBooks
+where Title="Database System Concepts"; 
+
+(c)
+update Librarybooks
+set Depatment="CS"
+where Title="Discrete Maths";
+
+(d)
+select * from librarybooks
+where Department="CS";
+
+(e)
+select * from librarybooks
+where Department="CS" and Author="Navathe";
+
+(f)
+select * from LibraryBooks a Lb,IssuedBooks as Ib
+where Lb.Department="CS" and Lb.Accession_number=Ib.Accession_number;
+
+(g)
+select * from Librarybooks 
+where price < 500 and purchasedate between '1999-01-01' and '2004-01-01';
+
+2. Create a database having three tables to store the details of students of Computer Department in your college, as per the given schema. 
+Personal information about Student (College roll number, Name of student, Date of birth, Address, Marks(rounded off to whole number) in percentage at 10 + 2, Phone number)
+Paper Details (Paper code, Name of the Paper) 
+Student’s Academic and Attendance details (College roll number, Paper code, Attendance, Marks in home examination).  
+a) Identify primary and foreign keys. Create the tables and insert at least 5 records in each table. b) Design a query that will return the records (from the second table) along with the name of student from the first table, related to students who have more than 75% attendance and more than 60% marks in paper 2. c) List all students who live in “Delhi” and have marks greater than 60 in paper 1. d) Find the total attendance and total marks obtained by each student. e) List the name of student who has got the highest marks in paper 2. 
+
+
+Solution:
+use db;
+
+-----creating tables-----
+ create table std_info(
+ Roll_no int(10) primary key,
+ Name varchar(30) not null,
+ dob date,
+ Address varchar(50),
+ Marks int(3),
+ Phone_number varchar(10));
+
+ create table Paper_details(
+ Paper_code int(10) primary key,
+ Paper_name varchar(20));
+
+ create table Academic_details(
+ Roll_no int(10),
+ Paper_code int(10) not null,
+ Attendance int(10) not null,
+ homeexam_marks int(3)
+ primary key(Roll_no,Paper_code));
+
+
+(a)
+Roll_no is the primary key for the table std_info, Paper_code is the primary key of table Paper_details and Roll_no,Paper_code is the primary key of table Academic_details.
+Academic_details have two foreign keys viz. Roll_no and Paper_code.
+
+-----inserting values------
+
+INSERT INTO std_info VALUES (1204, 'Anupam Anand', '2001-02-28', 'Gaya', 86, '9865785264');
+INSERT INTO std_info VALUES (1206, 'Aviral Yadav', '1999-03-19', 'Lucknow', 96, '8745698512');
+INSERT INTO std_info VALUES (1208, 'Arpit Maurya', '2001-03-12', 'Lucknow', 88, '7896589658');
+INSERT INTO std_info VALUES (1227, 'Ranjit Prasad', '2001-07-16', 'Siliguri', 91, '8825394198');
+INSERT INTO std_info VALUES (1240, 'VK Singh', '2001-07-19', 'Gorakhpur', 89, '7598412365');
+
+
+INSERT INTO paper_details VALUES (105, 'Algebra');
+INSERT INTO paper_details VALUES (802, 'Probability');
+INSERT INTO paper_details VALUES (506, 'DBMS');
+INSERT INTO paper_details VALUES (129, 'EVS');
+INSERT INTO paper_details VALUES (566, 'Economics');
+
+
+INSERT INTO academic_details VALUES (1204, 105, 85, 96);
+INSERT INTO academic_details VALUES (1206, 129, 65, 96);
+INSERT INTO academic_details VALUES (1208, 506, 96, 84);
+INSERT INTO academic_details VALUES (1227, 566, 94, '69);
+INSERT INTO academic_details VALUES (1240, 802, 80, 75);
+
+(b)
+select pd.paper_code, pd.paper_name, pi.Name from paper_details as pd, std_info as pi where paper_code=2 and pi.roll_no in(select roll_no from academic_details where paper_code=2 and attendance>75 and marks>60);
+
+
+(c)
+select * from std_info where
+Address="Delhi" and Marks>60;
+
+(d)
+select name, Attendance, marks, homeexam_marks
+from std_info as si, Academic_details as ad
+where ad.Roll_no=si.Roll_no;
+
+(e)
+select name from std_info where Roll_no in(
+select Roll_no from academic_details where homeexam_marks in(
+select max(homeexam_marks) from academic_details));
+
+
+
+3. Create the following tables and answer the queries given below: 
+Customer (CustID, email, Name, Phone, ReferrerID) Bicycle (BicycleID, DatePurchased, Color, CustID, ModelNo) BicycleModel (ModelNo, Manufacturer, Style) Service (StartDate, BicycleID, EndDate)  
+a) Identify primary and foreign keys. Create the tables and insert at least 5 records in each table. b) List all the customers who have the bicycles manufactured by manufacturer “Honda”. c) List the bicycles purchased by the customers who have been referred by customer “C1”. d) List the manufacturer of red colored bicycles. e) List the models of the bicycles given for service. 
+
+Solution:
+
+-----Creating tables-----
+
+create table Customer(
+CustID varchar(10) primary key,
+email varchar(20) not null,
+Name varchar(30) not null,
+Phone varchar(10) not null,
+ReferrerID varchar(10) not null);
+
+create table Bicycle(
+BicycleID varchar(10) primary key,
+DatePurchased date,
+Color varchar(20),
+CustID varchar(10) not null,
+ModelNo varchar(10),
+foreign key(CustID) references Customer(CustID));
+
+create table BicycleModel(
+ModelNo varchar(10) primary key,
+Manufacturer varchar(20) not null,
+Style varchar(10) not null);
+
+create table service(
+BicycleID  varchar(10) primary key,
+startdate date,
+enddate date,
+foreign key(BicycleID) references Bicycle(BicycleID));
+
+alter table Bicycle
+add constraint foreign key(ModelNo) references BicycleModel(ModelNO);
+
+(a)
+Primary keys for respective tables:
+Customer: CustID
+Bicycle: BicycleID
+BicycleModel: ModelNo
+Service: BicycleID
+
+Foreign keys for respective tables:
+Bicycle: CustID, ModelNo
+Service: BicycleId
+
+-----inserting values-----
+
+INSERT INTO customer VALUES ('RAN123', 'ranjit@gmail.com', 'Ranjit', '8825394198', '256');
+INSERT INTO customer VALUES ('PRA564', 'prachi@gmail.com', 'Prachi', '9832015040', '256');
+INSERT INTO customer VALUES ('ROH698', 'rohit@gmail.com', 'Rohit', '9321456856', '2368');
+INSERT INTO customer VALUES ('VIN999', 'vinay@gmail.com', 'Vinay', '8965475695', '998');
+INSERT INTO customer VALUES ('MUJ699', 'mujtaba@gmail.com', 'Mujtaba', '9654789569', '1456');
+
+
+INSERT INTO BicycleModel VALUES ('8569', 'Hero', 'sprint');
+INSERT INTO BicycleModel VALUES ('9966', 'Honda', 'Classic');
+INSERT INTO BicycleModel VALUES ('5234', 'Avon', 'Retro');
+INSERT INTO BicycleModel VALUES ('9333', 'Honda', 'mountain');
+INSERT INTO BicycleModel VALUES ('2577', 'Avon', 'Classic');
+
+
+INSERT INTO Bicycle VALUES ('20369', '2019-03-23', 'Red', 'RAN123', '9333');
+INSERT INTO Bicycle VALUES ('96548', '2020-01-29', 'Blue', 'Ran123', '5234');
+INSERT INTO Bicycle VALUES ('88692', '2018-02-15', 'White', 'Roh698', '2577');
+INSERT INTO Bicycle VALUES ('23654', '2019-12-12', 'black', 'pra564', '8569');
+INSERT INTO Bicycle VALUES ('22222', '2015-03-26', 'Red', 'MUJ699', '9966');
+
+INSERT INTO Service VALUES ('20369', '2019-03-23', '2020-03-23');
+INSERT INTO Service VALUES ('22222', '2015-03-26', '2016-03-26');
+INSERT INTO Service VALUES ('23654', '2019-12-12', '2020-12-12');
+INSERT INTO Service VALUES ('88692', '2018-02-15', '2019-02-15');
+INSERT INTO Service VALUES ('96548', '2020-01-29', '2021-01-29');
+
+(b)
+select * from customer where CustID in(select CustID from Bicycle
+where ModelNo in(select ModelNo from BicycleModel where 
+Manufacturer="Honda"));
+
+(c)
+select * from Bicycle where CustID in(
+select CustID from Customer where 
+ReferrerID="256");
+
+(d)
+select distinct(Manufacturer) from BicycleModel where
+ModelNo in(select ModelNo from Bicycle 
+where color="Red");
+
+(e)
+select modelNo from Bicycle where BicycleID in(
+select bicycleID from Service);
+
+
+4. Create the following tables, enter at least 5 records in each table and answer the queries given below. 
+EMPLOYEE ( Person_Name, Street, City ) 
+WORKS ( Person_Name, Company_Name, Salary ) COMPANY ( Company_Name, City ) MANAGES ( Person_Name, Manager_Name )  
+a) Identify primary and foreign keys. b) Alter table employee, add a column “email” of type varchar(20). c) Find the name of all managers who work for both Samba Bank and NCB Bank. d) Find the names, street address and cities of residence and salary of all employees who work for “Samba Bank” and earn more than $10,000. e) Find the names of all employees who live in the same city as the company for which they work. f) Find the highest salary, lowest salary and average salary paid by each company. g) Find the sum of salary and number of employees in each company.h) Find the name of the company that pays highest salary. 
+
+
+Solution:
+
+-----Creating Tables-----
+create table Employee(
+Person_name varchar(20) primary key,
+Street varchar(20),
+City varchar(20));
+
+create table Works(
+Person_name varchar(20) primary key,
+Company_name varchar(20) not null,
+Salary int(6),
+foreign key(Person_name) references Employee(Person_name));
+
+create table company(
+Company_name varchar(20) primary key,
+city varchar(20));
+
+create table Manages(
+Person_name varchar(20) primary key,
+Manager_name varchar(20)
+foreign key(Preson_name) references Employee(Person_name));
+
+alter table works 
+add constraint foreign key(Company_name) references Company(Company_name);
+
+-----inserting values-----
+
+insert into employee values("Rashmi","23/34 B block","Delhi");
+insert into employee values("Teena","454/4 V block","Gurgaon");
+insert into employee values("Ananya","65/6 A block","Gurgaon");
+insert into employee values("Kritika","87/2 D block","Lucknow");
+insert into employee values("Gaurav","74/2 F block","Gaziabad");
+insert into employee values("Saurav","54/2 G block","Noida");
+insert into employee values("Kashish","347-5 A block","Noida");
+insert into employee values("Pawan","65/8 V block","Gurgaon");
+insert into employee values("Nikhil","62/7 d block","Sitapur");
+insert into employee values("Neha","91/8 C block","Gaziabad");
+
+insert into company values("Samba Bank","Delhi");
+insert into company values("NCB Bank","Gurgaon");
+insert into company values("Axis Bank","Noida");
+insert into company values("SBI bank","Lucknow");
+insert into company values("Kotak Bank","Gaziabad");
+
+insert into works values("Rashmi","Samba Bank", 20000);
+insert into works values("Teena","NCB Bank",15000);
+insert into works values("Ananya","Samba Bank",5000);
+insert into works values("Kritika","SBI Bank",8000);
+insert into works values("Gaurav","Axis Bank",10000);
+insert into works values("Saurav","NCB Bank",20000);
+insert into works values("Kashish","Kotak Bank",15000);
+insert into works values("Pawan","Axis Bank",20000);
+insert into works values("Nikhil","SBI Bank",12000);
+insert into works values("Neha","Kotak Bank",18000);
+
+insert into manages values("Ananya","Sachin");
+insert into manages values("Teena","Tenzin");
+insert into manages values("Gaurav","Abhishek");
+insert into manages values("Neha","Vipin");
+insert into manages values("Pawan","Vipin");
+
+
+
+
+
+(a)
+Primary keys for corresponding tables are:
+Employee: Person_name
+Works: Person_name
+Company: Company_Name
+Manages: Person_name
+
+Foreign keys for corresponding tables are:
+Works: Person_name, Company_name
+manages: Person_name
+
+(b)
+alter table employee
+add column email varchar(20) not null;
+
+(c)
+select Manager_name from manages where person_name in(
+select person_name from works where company_name="Samba bank" and company_name="NCB bank");
+
+(d)
+select em.person_name , street, city, salary from employee as em,works as wo 
+where em.Person_name=wo.Person_name and 
+wo.Company_name="Samba Bank" and wo.Salary>10000;
+
+(e)
+select em.Person_name from employee as em , company as cm, works as wo where
+em.Person_name=wo.person_name and wo.company_name=cm.company_name
+and em.city=cm.city;
+
+(f)
+select company_name,max(salary) as Highest_Salary, min(salary) as Lowest_salary,avg(salary) as Average_salary from works
+group by company_name;
+
+(g)
+select company_name,sum(salary), count(person_name) from works
+group by company_name;
+
+
+5. Create the following tables, enter at least 5 records in each table and answer the queries given below. 
+Suppliers (SNo, Sname, Status, SCity) Parts (PNo, Pname, Colour, Weight, City) Project (JNo, Jname, Jcity) Shipment (Sno, Pno, Jno, Qunatity)  
+a) Identify primary and foreign keys. b) Get supplier numbers for suppliers in Paris with status>20. c) Get suppliers details for suppliers who supply part P2. Display the supplier list in increasing order of supplier numbers. d) Get suppliers names for suppliers who do not supply part P2. e) For each shipment get full shipment details, including total shipment weights. f) Get all the shipments where the quantity is in the range 300 to 750 inclusive. g) Get part nos. for parts that either weigh more than 16 pounds or are supplied by suppliers S2, or both. h) Get the names of cities that store more than five red parts. i) Get full details of parts supplied by a supplier in London. j) Get part numbers for part supplied by a supplier in London to a project in London. k) Get the total number of project supplied by a supplier (say, S1). l) Get the total quantity of a part (say, P1) supplied by a supplier (say, S1).
+
+
+Solution:
+
+-----Creating tables-----
+
+create table Suppliers(
+SNo int(10) primary key,
+Sname varchar(20) ,
+status varchar(20),
+SCity varchar(20));
+
+create table Parts(
+PNo varchar(10) primary key,
+Pname varchar(20),
+Color varchar(10),
+Weight int ,
+city varchar(20));
+
+create table project(
+JNo varchar(10) primary key,
+Jname varchar(20),
+Jcity varchar(10));
+
+create table Shipment(
+SNo int(10),
+PNo varchar(10),
+JNo varchar(10),
+Quantity int,
+foreign key(SNo) references Suppliers(SNo),
+foreign key(PNo) references Parts(PNo),
+foreign key(JNo) references Project(JNo),
+primary key(SNo,PNo,JNo));
+
+-----inserting values-----
+
+insert into suppliers values(101,"S1",30,"London");
+insert into suppliers values(102,"S2",19,"New York");
+insert into suppliers values(103,"S1",22,"Paris");
+insert into suppliers values(104,"S2",70,"Los Angeles");
+insert into suppliers values(105,"S2",70,"Los Angeles");
+
+insert into parts values( "501","P1","Black",16,"Paris");
+insert into parts values( "502","P2","Red",40,"London");
+insert into parts values( "503","P3","Gray",20,"London");
+insert into parts values( "504","P2","Green",60,"Singapore");
+insert into parts values( "505","P2","Black",10,"New York");
+
+insert into project values("1001","J1","London");
+insert into project values("1002","J2","New York");
+insert into project values("1003","J3","New York");
+insert into project values("1004","J4","Singapore");
+insert into project values("1005","J4","Delhi");
+
+insert into shipment values(101,"504","1002",250);
+insert into shipment values(103,"505","1003",100);
+insert into shipment values(105,"502","1003",500);
+insert into shipment values(101,"503","1001",300);
+insert into shipment values(102,"501","1005",750);
+insert into shipment values(101,"501","1002",100);
+
+(a)
+Primary keys:
+Suppliers: SNo
+Parts: PNo
+Project: JNo
+Shipment: SNo,PNo,JNo
+
+(b)
+select SNo from suppliers where Scity="Paris" and status>20;
+
+(c)
+Select * from suppliers where Sno in(
+select Sno from shipment where Pno in(
+select Pno from parts where Pname="P2")) Order by sno;
+
+(d)
+Select Sname from suppliers where Sno in(
+Select sno from shipment where Pno in(
+select Pno from parts where Pname!="P2"));
+
+(e)
+select s.Sno, s.Pno, s.Jno, s.Quantity, 
+s.quantity*p.weight as "Total_shipment_weight" from shipment as s,parts as p where s.pno=p.pno;
+
+(f)
+Select * from shipment where quantity between 300 and 750;
+
+(g)
+select Pno from parts where weight>16 or pno in(
+select pno from shipment where sno in(
+select s.sno from shipment as s, suppliers as su where s.sno=su.sno and su.sname="S2"));
+
+(h)
+mysql> select city from parts where colour="Red" and Pno in(select pno from shipment where quantity>5);
+
+(i)
+mysql> select * from parts where pno in(
+select Pno from shipment where sno in(
+select sno from suppliers where Scity="London"));
+
+(j)
+select Pno from shipment where sno in(select sno from suppliers where scity="London") and Jno in(Select jno from project where Jcity="London");
+
+(k)
+select count(distinct(Jno)) as "No. of Project Supplied by supplier S1" from shipment where sno in(select sno from suppliers where Sname="S1");
+
+(l)
+select count(*) from parts where Pno in(Select Pno from shipment where sno in(select Sno from suppliers where sname ="S1")) and Pname="P1";
+
