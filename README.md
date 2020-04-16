@@ -5,9 +5,9 @@
 * Subject - DBMS (Generic Elective)
 
 # Table of Content:
-* [General Info] (#general_info)
-* [Technologies] (#technologies)
-* [Contents] (#Contents)
+* [General Info](#general_info)
+* [Technologies](#technologies)
+* [Contents](#Contents)
 
 # General_Info
 This Project is completed as per the guidelines, given by University of Delhi.
@@ -21,7 +21,7 @@ db
 1. LibraryBooks
 2. IssuedBooks
 
-###Question 2
+### Question 2
 ###### Database Name
 db
 ###### Tables
