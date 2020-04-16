@@ -1,0 +1,74 @@
+2. Create a database having three tables to store the details of students of Computer Department in your college, as per the given schema. 
+Personal information about Student (College roll number, Name of student, Date of birth, Address, Marks(rounded off to whole number) in percentage at 10 + 2, Phone number)
+Paper Details (Paper code, Name of the Paper) 
+Student’s Academic and Attendance details (College roll number, Paper code, Attendance, Marks in home examination).  
+a) Identify primary and foreign keys. Create the tables and insert at least 5 records in each table. b) Design a query that will return the records (from the second table) along with the name of student from the first table, related to students who have more than 75% attendance and more than 60% marks in paper 2. c) List all students who live in “Delhi” and have marks greater than 60 in paper 1. d) Find the total attendance and total marks obtained by each student. e) List the name of student who has got the highest marks in paper 2. 
+
+
+Solution:
+use db;
+
+-----creating tables-----
+ create table std_info(
+ Roll_no int(10) primary key,
+ Name varchar(30) not null,
+ dob date,
+ Address varchar(50),
+ Marks int(3),
+ Phone_number varchar(10));
+
+ create table Paper_details(
+ Paper_code int(10) primary key,
+ Paper_name varchar(20));
+
+ create table Academic_details(
+ Roll_no int(10),
+ Paper_code int(10) not null,
+ Attendance int(10) not null,
+ homeexam_marks int(3)
+ primary key(Roll_no,Paper_code));
+
+
+(a)
+Roll_no is the primary key for the table std_info, Paper_code is the primary key of table Paper_details and Roll_no,Paper_code is the primary key of table Academic_details.
+Academic_details have two foreign keys viz. Roll_no and Paper_code.
+
+-----inserting values------
+
+INSERT INTO std_info VALUES (1204, 'Anupam Anand', '2001-02-28', 'Gaya', 86, '9865785264');
+INSERT INTO std_info VALUES (1206, 'Aviral Yadav', '1999-03-19', 'Lucknow', 96, '8745698512');
+INSERT INTO std_info VALUES (1208, 'Arpit Maurya', '2001-03-12', 'Lucknow', 88, '7896589658');
+INSERT INTO std_info VALUES (1227, 'Ranjit Prasad', '2001-07-16', 'Siliguri', 91, '8825394198');
+INSERT INTO std_info VALUES (1240, 'VK Singh', '2001-07-19', 'Gorakhpur', 89, '7598412365');
+
+
+INSERT INTO paper_details VALUES (105, 'Algebra');
+INSERT INTO paper_details VALUES (802, 'Probability');
+INSERT INTO paper_details VALUES (506, 'DBMS');
+INSERT INTO paper_details VALUES (129, 'EVS');
+INSERT INTO paper_details VALUES (566, 'Economics');
+
+
+INSERT INTO academic_details VALUES (1204, 105, 85, 96);
+INSERT INTO academic_details VALUES (1206, 129, 65, 96);
+INSERT INTO academic_details VALUES (1208, 506, 96, 84);
+INSERT INTO academic_details VALUES (1227, 566, 94, '69);
+INSERT INTO academic_details VALUES (1240, 802, 80, 75);
+
+(b)
+select pd.paper_code, pd.paper_name, pi.Name from paper_details as pd, std_info as pi where paper_code=2 and pi.roll_no in(select roll_no from academic_details where paper_code=2 and attendance>75 and marks>60);
+
+
+(c)
+select * from std_info where
+Address="Delhi" and Marks>60;
+
+(d)
+select name, Attendance, marks, homeexam_marks
+from std_info as si, Academic_details as ad
+where ad.Roll_no=si.Roll_no;
+
+(e)
+select name from std_info where Roll_no in(
+select Roll_no from academic_details where homeexam_marks in(
+select max(homeexam_marks) from academic_details));
