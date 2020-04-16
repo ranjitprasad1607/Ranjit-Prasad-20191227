@@ -1,0 +1,78 @@
+1. Create a database having two tables with the specified fields, to computerize a library system of a Delhi University College. 
+LibraryBooks (Accession number, Title, Author, Department, PurchaseDate, Price) 10 
+
+IssuedBooks (Accession number, Borrower) 
+a) Identify primary and foreign keys. Create the tables and insert at least 5 records in each table. 
+b) Delete the record of book titled “Database System Concepts”. 
+c) Change the Department of the book titled “Discrete Maths” to “CS”. 
+d) List all books that belong to “CS” department. 
+e) List all books that belong to “CS” department and are written by author “Navathe”. 
+f) List all computer (Department = “CS”) that have been issued. 
+g) List all books which have a price less than 500 or purchased between “01/01/1999” and “01/01/2004”. 
+
+Solution:
+create database db;
+use db;
+
+-----Creating Tables-----
+
+create table LibraryBooks(
+Accession_number int(10) primary key,
+Title varchar(40) not null,
+Author varchar(20) not null,
+Department varchar(15) not null,
+PurchaseDate date,
+Price int(10));
+
+create table IssuedBooks(
+Accession_number int(10) not null,
+Borrower varchar(30),
+foreign key(Accession_number) references LibraryBooks(Accession_number));
+
+(a)
+Accession_number is the primary key for table LibraryBooks and it is the foreign key for table Issued books.
+
+-----Inserting values-----
+
+insert into LibraryBooks(1234,"Database System Concepts","Ranjit Prasad","CS",'2015-02-26',450);
+insert into LibraryBooks(5468,"Discrete Maths","RD Sharma",Mathematics",'2005-03-28',880);
+insert into LibraryBooks(9876,"Trigonometry","SL Loney","Mathematics",'2010-12-08',490)
+insert into LibraryBooks(8856,"Neural Networks","Navathe","CS",'2018-11-18',1150);
+insert into LibraryBooks(7796,"Panchatantra","Vishnu Sharma","Hindi",'2000-11-02',150);
+insert into LibraryBooks(5598,"Rich Dad Poor Dad","Robert T Kiyosaki","Finance",'2012-11-02',200);
+insert into LibraryBooks(8236,"Advanced Matrices",Navathe",Mathematics",'2002-11-20',2150);
+insert into LibraryBooks(2132,"Concept of Physics","HC Verma","CS",'2001-10-26',450);
+insert into LibraryBooks(1897,"Cloud Computing","Navathe","CS",'2011-12-01',2450);
+insert into LibraryBooks(1556,"The Invisible Man","HG Wells","ENglish",'2001-12-10',350);
+
+
+insert into IssuedBooks values(1234,”Anupam Anand”);
+insert into IssuedBooks values(1556,”V K Singh”);
+insert into IssuedBooks values(8856,”Aviral Yadav”);
+insert into IssuedBooks values(5598,”Arpit Maurya”);
+insert into IssuedBooks values(1897,”Shubham Kumar Gupta”);
+
+(b) 
+delete from libraryBooks
+where Title="Database System Concepts"; 
+
+(c)
+update Librarybooks
+set Depatment="CS"
+where Title="Discrete Maths";
+
+(d)
+select * from librarybooks
+where Department="CS";
+
+(e)
+select * from librarybooks
+where Department="CS" and Author="Navathe";
+
+(f)
+select * from LibraryBooks a Lb,IssuedBooks as Ib
+where Lb.Department="CS" and Lb.Accession_number=Ib.Accession_number;
+
+(g)
+select * from Librarybooks 
+where price < 500 and purchasedate between '1999-01-01' and '2004-01-01';
