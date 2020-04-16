@@ -13,6 +13,9 @@
 This Project is completed as per the guidelines, given by University of Delhi.
 It consists of 5 questions which have covered various SQL commands and queries.
 
+# Technologies
+* MYSQL Version 5.1
+
 # Contents
 ### Question 1
 ###### Database Name
