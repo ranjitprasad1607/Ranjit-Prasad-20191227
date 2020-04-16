@@ -1,0 +1,127 @@
+5. Create the following tables, enter at least 5 records in each table and answer the queries given below. 
+Suppliers (SNo, Sname, Status, SCity) 
+Parts (PNo, Pname, Colour, Weight, City) 
+Project (JNo, Jname, Jcity) 
+Shipment (Sno, Pno, Jno, Qunatity)  
+a) Identify primary and foreign keys. 
+b) Get supplier numbers for suppliers in Paris with status>20. 
+c) Get suppliers details for suppliers who supply part P2. Display the supplier list in increasing order of supplier numbers. 
+d) Get suppliers names for suppliers who do not supply part P2. 
+e) For each shipment get full shipment details, including total shipment weights. 
+f) Get all the shipments where the quantity is in the range 300 to 750 inclusive. 
+g) Get part nos. for parts that either weigh more than 16 pounds or are supplied by suppliers S2, or both. 
+h) Get the names of cities that store more than five red parts. i) Get full details of parts supplied by a supplier in London. 
+j) Get part numbers for part supplied by a supplier in London to a project in London. 
+k) Get the total number of project supplied by a supplier (say, S1). 
+l) Get the total quantity of a part (say, P1) supplied by a supplier (say, S1).
+
+
+Solution:
+use db;
+
+-----Creating tables-----
+
+create table Suppliers(
+SNo int(10) primary key,
+Sname varchar(20) ,
+status varchar(20),
+SCity varchar(20));
+
+create table Parts(
+PNo varchar(10) primary key,
+Pname varchar(20),
+Color varchar(10),
+Weight int ,
+city varchar(20));
+
+create table project(
+JNo varchar(10) primary key,
+Jname varchar(20),
+Jcity varchar(10));
+
+create table Shipment(
+SNo int(10),
+PNo varchar(10),
+JNo varchar(10),
+Quantity int,
+foreign key(SNo) references Suppliers(SNo),
+foreign key(PNo) references Parts(PNo),
+foreign key(JNo) references Project(JNo),
+primary key(SNo,PNo,JNo));
+
+-----inserting values-----
+
+insert into suppliers values(101,"S1",30,"London");
+insert into suppliers values(102,"S2",19,"New York");
+insert into suppliers values(103,"S1",22,"Paris");
+insert into suppliers values(104,"S2",70,"Los Angeles");
+insert into suppliers values(105,"S2",70,"Los Angeles");
+
+insert into parts values( "501","P1","Black",16,"Paris");
+insert into parts values( "502","P2","Red",40,"London");
+insert into parts values( "503","P3","Gray",20,"London");
+insert into parts values( "504","P2","Green",60,"Singapore");
+insert into parts values( "505","P2","Black",10,"New York");
+
+insert into project values("1001","J1","London");
+insert into project values("1002","J2","New York");
+insert into project values("1003","J3","New York");
+insert into project values("1004","J4","Singapore");
+insert into project values("1005","J4","Delhi");
+
+insert into shipment values(101,"504","1002",250);
+insert into shipment values(103,"505","1003",100);
+insert into shipment values(105,"502","1003",500);
+insert into shipment values(101,"503","1001",300);
+insert into shipment values(102,"501","1005",750);
+insert into shipment values(101,"501","1002",100);
+
+(a)
+Primary keys:
+Suppliers: SNo
+Parts: PNo
+Project: JNo
+Shipment: SNo,PNo,JNo
+
+(b)
+select SNo from suppliers where Scity="Paris" and status>20;
+
+(c)
+Select * from suppliers where Sno in(
+select Sno from shipment where Pno in(
+select Pno from parts where Pname="P2")) Order by sno;
+
+(d)
+Select Sname from suppliers where Sno in(
+Select sno from shipment where Pno in(
+select Pno from parts where Pname!="P2"));
+
+(e)
+select s.Sno, s.Pno, s.Jno, s.Quantity, 
+s.quantity*p.weight as "Total_shipment_weight" from shipment as s,parts as p where s.pno=p.pno;
+
+(f)
+Select * from shipment where quantity between 300 and 750;
+
+(g)
+select Pno from parts where weight>16 or pno in(
+select pno from shipment where sno in(
+select s.sno from shipment as s, suppliers as su where s.sno=su.sno and su.sname="S2"));
+
+(h)
+mysql> select city from parts where colour="Red" and Pno in(select pno from shipment where quantity>5);
+
+(i)
+mysql> select * from parts where pno in(
+select Pno from shipment where sno in(
+select sno from suppliers where Scity="London"));
+
+(j)
+select Pno from shipment where sno in(select sno from suppliers where scity="London") and Jno in(Select jno from project where Jcity="London");
+
+(k)
+select count(distinct(Jno)) as "No. of Project Supplied by supplier S1" from shipment where sno in(select sno from suppliers where Sname="S1");
+
+(l)
+select count(*) from parts where Pno in(Select Pno from shipment where sno in(select Sno from suppliers where sname ="S1")) and Pname="P1";
+
