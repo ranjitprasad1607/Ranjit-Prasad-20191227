@@ -1,0 +1,118 @@
+4. Create the following tables, enter at least 5 records in each table and answer the queries given below. 
+EMPLOYEE ( Person_Name, Street, City ) 
+WORKS ( Person_Name, Company_Name, Salary ) 
+COMPANY ( Company_Name, City ) 
+MANAGES ( Person_Name, Manager_Name )  
+a) Identify primary and foreign keys. 
+b) Alter table employee, add a column “email” of type varchar(20). 
+c) Find the name of all managers who work for both Samba Bank and NCB Bank. 
+d) Find the names, street address and cities of residence and salary of all employees who work for “Samba Bank” and earn more than $10,000. 
+e) Find the names of all employees who live in the same city as the company for which they work. 
+f) Find the highest salary, lowest salary and average salary paid by each company. 
+g) Find the sum of salary and number of employees in each company.
+h) Find the name of the company that pays highest salary. 
+
+
+Solution:
+use db;
+
+-----Creating Tables-----
+create table Employee(
+Person_name varchar(20) primary key,
+Street varchar(20),
+City varchar(20));
+
+create table Works(
+Person_name varchar(20) primary key,
+Company_name varchar(20) not null,
+Salary int(6),
+foreign key(Person_name) references Employee(Person_name));
+
+create table company(
+Company_name varchar(20) primary key,
+city varchar(20));
+
+create table Manages(
+Person_name varchar(20) primary key,
+Manager_name varchar(20)
+foreign key(Preson_name) references Employee(Person_name));
+
+alter table works 
+add constraint foreign key(Company_name) references Company(Company_name);
+
+-----inserting values-----
+
+insert into employee values("Rashmi","23/34 B block","Delhi");
+insert into employee values("Teena","454/4 V block","Gurgaon");
+insert into employee values("Ananya","65/6 A block","Gurgaon");
+insert into employee values("Kritika","87/2 D block","Lucknow");
+insert into employee values("Gaurav","74/2 F block","Gaziabad");
+insert into employee values("Saurav","54/2 G block","Noida");
+insert into employee values("Kashish","347-5 A block","Noida");
+insert into employee values("Pawan","65/8 V block","Gurgaon");
+insert into employee values("Nikhil","62/7 d block","Sitapur");
+insert into employee values("Neha","91/8 C block","Gaziabad");
+
+insert into company values("Samba Bank","Delhi");
+insert into company values("NCB Bank","Gurgaon");
+insert into company values("Axis Bank","Noida");
+insert into company values("SBI bank","Lucknow");
+insert into company values("Kotak Bank","Gaziabad");
+
+insert into works values("Rashmi","Samba Bank", 20000);
+insert into works values("Teena","NCB Bank",15000);
+insert into works values("Ananya","Samba Bank",5000);
+insert into works values("Kritika","SBI Bank",8000);
+insert into works values("Gaurav","Axis Bank",10000);
+insert into works values("Saurav","NCB Bank",20000);
+insert into works values("Kashish","Kotak Bank",15000);
+insert into works values("Pawan","Axis Bank",20000);
+insert into works values("Nikhil","SBI Bank",12000);
+insert into works values("Neha","Kotak Bank",18000);
+
+insert into manages values("Ananya","Sachin");
+insert into manages values("Teena","Tenzin");
+insert into manages values("Gaurav","Abhishek");
+insert into manages values("Neha","Vipin");
+insert into manages values("Pawan","Vipin");
+
+
+
+
+
+(a)
+Primary keys for corresponding tables are:
+Employee: Person_name
+Works: Person_name
+Company: Company_Name
+Manages: Person_name
+
+Foreign keys for corresponding tables are:
+Works: Person_name, Company_name
+manages: Person_name
+
+(b)
+alter table employee
+add column email varchar(20) not null;
+
+(c)
+select Manager_name from manages where person_name in(
+select person_name from works where company_name="Samba bank" and company_name="NCB bank");
+
+(d)
+select em.person_name , street, city, salary from employee as em,works as wo 
+where em.Person_name=wo.Person_name and 
+wo.Company_name="Samba Bank" and wo.Salary>10000;
+
+(e)
+select em.Person_name from employee as em , company as cm, works as wo where
+em.Person_name=wo.person_name and wo.company_name=cm.company_name
+and em.city=cm.city;
+
+(f)
+select company_name,max(salary) as Highest_Salary, min(salary) as Lowest_salary,avg(salary) as Average_salary from works
+group by company_name;
+
+(g)
+select company_name,sum(salary), count(person_name) from works
+group by company_name;
